@@ -83,12 +83,12 @@ class Holder:
 
         def getsize(self):
                 '''Returns the number of spots that are full'''
-                return len(np.where(self.spots >= 0)[0])
+                return len(np.where(self.spots > 0)[0])
 
         def tick(self, num):
                 '''Updates the holder array for num ticks.'''
                 self.spots -= num
-                leaving = np.where(self.spots < 0)[0]
+                leaving = np.where(self.spots <= 0)[0]
                 numLeaving = len(leaving)
                 if numLeaving > 0:
                         left = numLeaving - self.output.add(numLeaving)
@@ -203,7 +203,7 @@ class Exit:
                 
 class Airport:
         '''Airport tick must operate so that decisions are updated last.'''
-        def __init__(self, start, parts, adjacency):
+        def __init__(self, start, end, parts, adjacency):
                 '''
                 start: The starting object for the airport.
                 queues: the list of all queues
@@ -211,6 +211,7 @@ class Airport:
                 decisions: the list of all decisions
                 '''
                 self.start = parts[start]
+                self.end = parts[end]
                 self.parts = np.array(parts)
                 self.adjacency = np.array(adjacency)
                 
@@ -220,7 +221,7 @@ class Airport:
                                 self.parts[i].output = outputs[0]
                         else:
                                 self.parts[i].output = outputs
-                self.updateOrder = breadth_first_order(self.adjacency,start)
+                self.updateOrder = breadth_first_order(np.transpose(self.adjacency),end)
                 
         def tick(self, num):
                 '''Tick update the queues, holders and decisions in the airport.
@@ -265,10 +266,10 @@ def edgeToAdj(objects, edgeList):
         return adjacency
 
 
-lobby = Holder(100, [1,2,3,4,5])
-q1 = Queue([1,2,2,3])
-q2 = Queue([1,2,2,3])
-q3 = Queue([1,2,2,3])
+lobby = Holder(100, [1,2,2,3,3,3,4,4,5])
+q1 = Queue([1,2])
+q2 = Queue([1,2])
+q3 = Queue([1,2])
 h1 = Holder(10, [1,2,2,3,3,3,4,4,5])
 h2 = Holder(10, [1,2,2,3,3,3,4,4,5])
 h3 = Holder(10, [1,2,2,3,3,3,4,4,5])
@@ -282,12 +283,10 @@ objects = [lobby, q1, q2, q3, h1, h2, h3, d1, gates]
 
 edgeList = [(lobby,d1),(d1, q1),(d1,q2),(d1,q3),(q1,h1),(q2,h2),(q3,h3),(h1,gates),(h2,gates),(h3,gates)]
 adjacency = edgeToAdj(objects, edgeList)
-ap = Airport(0, objects, adjacency)
+ap = Airport(0, 8, objects, adjacency)
 
 def timeFunc(t):
-        if t % 3 == 0:
-                return 1
-        return 0
+        return np.random.choice([0,5,5,10])
 '''
 ticks = 0
 while (ticks < 10 ** 6):
