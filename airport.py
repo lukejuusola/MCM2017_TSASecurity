@@ -189,7 +189,7 @@ class Exit:
                 return None
                 
         def add(self, num):
-                self.size += 1
+                self.size += num
                 return 0
 
         def getsize(self):
@@ -246,7 +246,7 @@ class Airport:
                         self.start.add(timeFunc(t))
                         self.tick(resolution)
                         sizes = self.getSizes()
-                        print(str(sizes))
+                        print(str(sizes) + '\t' + str(np.sum(sizes)))
                         t += resolution
 
         def clear(self):
@@ -267,12 +267,12 @@ def edgeToAdj(objects, edgeList):
 
 
 lobby = Holder(100, [1,2,2,3,3,3,4,4,5])
-q1 = Queue([1,2])
-q2 = Queue([1,2])
-q3 = Queue([1,2])
-h1 = Holder(10, [1,2,2,3,3,3,4,4,5])
-h2 = Holder(10, [1,2,2,3,3,3,4,4,5])
-h3 = Holder(10, [1,2,2,3,3,3,4,4,5])
+q1 = Queue([1])
+q2 = Queue([1])
+q3 = Queue([1])
+h1 = Holder(10, [15,10])
+h2 = Holder(10, [15,10])
+h3 = Holder(10, [15,10])
 gates = Exit()
 
 def f1(outputs):
@@ -286,7 +286,7 @@ adjacency = edgeToAdj(objects, edgeList)
 ap = Airport(0, 8, objects, adjacency)
 
 def timeFunc(t):
-        return np.random.choice([0,5,5,10])
+        return np.random.choice([2])
 '''
 ticks = 0
 while (ticks < 10 ** 6):
