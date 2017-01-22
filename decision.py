@@ -20,6 +20,11 @@ class Decision:
         def getsize(self):
                 return 0
 
+        def isSpace(self):
+                return 1
+
+        def getData(self):
+                return '0'
         def tick(self, num):
                 return 0
 
@@ -33,7 +38,7 @@ class Decision:
         def clear(self):
                 return None
 
-            """
+"""
 class Decision:
         def __init__(self, alphas, betas):
                 '''Outputs is a list of objects the decision is outputting to.

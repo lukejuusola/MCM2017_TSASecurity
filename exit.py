@@ -16,5 +16,8 @@ class Exit:
         def exitWait(self):
                 return 0
 
+        def getData(self):
+                return str(self.size);
+
         def clear(self):
                 return None

@@ -12,6 +12,7 @@ class Holder:
                 self.output = None
                 self.avg = np.average(exitRates)
                 self.utility = np.array([0])
+                self.capacity = capacity
 
         def add(self, num):
                 '''Attemps to add num people to the holder. Returns the number of
@@ -27,6 +28,12 @@ class Holder:
         def getsize(self):
                 '''Returns the number of spots that are full'''
                 return len(np.where(self.spots > 0)[0])
+
+        def getData(self):
+                return ', '.join(self.spots.astype(str))
+
+        def isSpace(self):
+                return self.getsize() < self.capacity
 
         def tick(self, num):
                 '''Updates the holder array for num ticks.'''
@@ -45,10 +52,13 @@ class Holder:
                         
         def exitWait(self):
                 '''The expected exitWait of a holder.'''
-                return self.avg + self.output.exitWait()
+                return self.selfWait() + self.output.exitWait()
                 
         def selfWait(self):
-                return self.avg
+                if self.isSpace():
+                        return self.avg
+                else:
+                        return self.avg + np.average(self.spots)
 
         def clear(self):
                 self.spots = np.full(len(self.spots), np.NaN)

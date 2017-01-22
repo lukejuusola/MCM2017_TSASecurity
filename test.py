@@ -1,4 +1,9 @@
 import numpy as np
+from holder import Holder
+from queue  import Queue
+from airport import Airport
+from exit import Exit
+from decision import Decision
 
 def edgeToAdj(objects, edgeList):
         s = len(objects)
@@ -14,26 +19,40 @@ def edgeToAdj(objects, edgeList):
 
 
 lobby = Holder(100, [1,2,2,3,3,3,4,4,5])
+s1 = Queue([3,4,4,5])
+s2 = Queue([3,4,4,5])
+s3 = Queue([3,4,4,5])
 q1 = Queue([1])
 q2 = Queue([1])
 q3 = Queue([1])
-h1 = Holder(10, [15,10])
-h2 = Holder(10, [15,10])
-h3 = Holder(10, [15,10])
+h1 = Holder(4, [8,10,10,12])
+h2 = Holder(4, [8,10,10,12])
+h3 = Holder(4, [8,10,10,12])
 gates = Exit()
 
-def f1(outputs):
-        a = [1 / len(outputs)] * len(outputs)
-        return np.array(a)
-d1 = Decision([0,1,2], [q1, q2, q3], f1)
-objects = [lobby, q1, q2, q3, h1, h2, h3, d1, gates]
+
+def choosemin(outputs):
+        min = outputs[0].selfWait()
+        mini = 0
+        for i in range(1, len(outputs)):
+            if outputs[i].selfWait() < min:
+                mini = i
+                min = outputs[i].selfWait()
+        probs = np.zeros(len(outputs))
+        probs[mini] = 1
+        return probs
+    
+d1 = Decision([0,1,2], [q1, q2, q3, s1, s2, s3], choosemin)
+objects = [lobby, s1, s2, s3, q1, q2, q3, h1, h2, h3, d1, gates]
 
 edgeList = [(lobby,d1),(d1, q1),(d1,q2),(d1,q3),(q1,h1),(q2,h2),(q3,h3),(h1,gates),(h2,gates),(h3,gates)]
 adjacency = edgeToAdj(objects, edgeList)
-ap = Airport(0, 8, objects, adjacency)
+ap = Airport(0, len(objects)-1, objects, adjacency)
 
 def timeFunc(t):
         return np.random.choice([2])
+
+    
 '''
 ticks = 0
 while (ticks < 10 ** 6):
