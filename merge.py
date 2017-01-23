@@ -44,8 +44,10 @@ class Merge:
         return 0
 
     def getData(self):
+        ll = self.numlastleft
+        self.numlastleft = 0
         '''returns string in the form A waiting, B waiting, lastleft'''
-        return str(self.numAwaiting) + ',' + str(self.numBwaiting) + ',' + str(self.numlastleft)
+        return str(self.numAwaiting) + ',' + str(self.numBwaiting) + ',' + str(ll)
 
     def exitWait(self):
         return self.output.exitWait()

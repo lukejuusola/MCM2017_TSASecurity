@@ -14,16 +14,19 @@ class Holder:
                 self.utility = np.array([0])
                 self.capacity = capacity
                 self.ptype = 'normal'
+                self.lastvalues = []
 
         def add(self, num, ptype='normal'):
                 '''Attemps to add num people to the holder. Returns the number of
                 people rejected from the holder.'''
                 i = np.where(np.isnan(self.spots))[0]
                 if len(i) > num:
-                        self.spots[i[0:num]] = self.exitRates[np.random.randint(0, len(self.exitRates), num)]
+                        self.lastvalues = self.exitRates[np.random.randint(0, len(self.exitRates), num)]
+                        self.spots[i[0:num]] = self.lastvalues
                         return 0
                 else:
-                        self.spots[i] = self.exitRates[np.random.randint(0, len(self.exitRates), len(i))]
+                        self.lastvalues = self.exitRates[np.random.randint(0, len(self.exitRates), num)]
+                        self.spots[i] = self.lastvalues
                         return num - len(i)
 
         def getsize(self):
@@ -31,8 +34,12 @@ class Holder:
                 return len(np.where(self.spots > 0)[0])
 
         def getData(self):
-                return ', '.join(self.spots.astype(str))
-                
+                lv = self.lastvalues
+                self.lastvalues = []
+                if len(lv) == 0:
+                        return str(self.getsize())
+                else:
+                        return str(self.getsize()) + ',' + ','.join(lv.astype(str))
 
         def isSpace(self, num=1):
                 return self.getsize() + num < self.capacity

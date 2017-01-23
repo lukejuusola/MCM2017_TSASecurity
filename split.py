@@ -17,15 +17,13 @@ class Split:
         self.lastvalues = []
         while num > 0:
             numbags = np.random.choice(self.numdist)
-            self.lastvalues.append(numbags)
             self.numvalues.append(numbags)
-            if self.outB.isSpace(numbags):
+            if self.outB.isSpace(numbags) and self.outA.add(1, ptype) > 0:
                 self.outB.add(numbags, ptype)
             else:
                 return num
-            if self.outA.add(1, ptype) > 0:
-                return num
             self.lastadded += 1
+            self.lastvalues.append(numbags)
             num -= 1
         return 0
 
@@ -36,8 +34,14 @@ class Split:
         return 0
 
     def getData(self):
-        self.lastvalues = np.array(self.lastvalues)
-        return str(self.lastadded) + ',' + ','.join(self.lastvalues.astype(str))
+        la = self.lastadded
+        lv = self.lastvalues
+        self.lastadded = 0
+        self.lastvalues = []
+        if la == 0:
+            return str(la)
+        lv = np.array(lv)
+        return str(la) + ',' + ','.join(lv.astype(str))
 
     def exitWait(self):
         return max(outA.exitWait(), outB.exitWait())

@@ -53,9 +53,13 @@ class Queue:
                 self.lastnumleft = numleft
 
         def getData(self):
+            ln = self.lastnumadded
+            lv = self.lastnumleft
+            self.lastnumadded = 0
+            self.lastnumleft = 0
             '''Returns a string containing, in order, size numadded numleft. Should be called
             once per tick'''
-            return str(self.size) + ', ' + str(self.lastnumadded) + ', ' + str(self.lastnumleft)
+            return str(self.size) + ', ' + str(ln) + ', ' + str(lv)
             
         def exitWait(self):
                 '''Returns the expected exitWait of the queue.'''
