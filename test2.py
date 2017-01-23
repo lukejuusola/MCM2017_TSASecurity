@@ -5,11 +5,11 @@ from airport import Airport
 from exit import Exit
 from decision import Decision
 import matplotlib.pyplot as plt
+from functions import *
 
 ALPHA = 1
 
 def calcprob(outputs):
-    #print(outputs)
     u = np.array([0.0] * len(outputs))
     exitTimes = []
     for out in outputs:
@@ -26,31 +26,12 @@ def calcprob(outputs):
         return prob
     prob = prob / np.sum(prob)
     return prob
-    
-def edgeToAdj(objects, edgeList):
-        s = len(objects)
-        adjacency = np.zeros((s,s))
-        for e in edgeList:
-                for o in range(len(objects)):
-                        if objects[o] == e[0]:
-                                i = o
-                        if objects[o] == e[1]:
-                                j = o
-                adjacency[i,j] = 1
-        return adjacency
 
 def timeFunc(t):
     x = np.sin(t/1000)*1.01
     x = max(0, x)
     x = int(x)
     return x
-
-def loadData(location):
-    fnames = np.genfromtxt(location+'/info.dat', dtype=type(''), delimiter=',')
-    data = []
-    for ftype, name in fnames:
-        data.append((ftype, np.loadtxt(location + '/' + name + '.dat', delimiter=',')))    
-    return data
 
 if __name__ == '__main__':
     q1 = Queue([1])

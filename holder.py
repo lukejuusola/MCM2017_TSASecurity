@@ -31,6 +31,7 @@ class Holder:
 
         def getData(self):
                 return ', '.join(self.spots.astype(str))
+                
 
         def isSpace(self):
                 return self.getsize() < self.capacity

@@ -69,4 +69,6 @@ class Queue:
 
         def clear(self):
                 self.size = 0
-                self.holder = 0
+                self.lastnumadded = 0
+                self.lastnumleft = 0
+                

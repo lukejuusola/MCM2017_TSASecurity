@@ -10,6 +10,10 @@ class Exit:
                 self.size += num
                 return 0
 
+        def remove(self, num):
+                self.size += num
+                return 0
+
         def getsize(self):
                 return self.size
         

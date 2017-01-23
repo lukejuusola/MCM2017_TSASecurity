@@ -68,8 +68,8 @@ class Airport:
                 
 
         def clear(self):
-                for p in parts:
-                        parts.clear()
+                for p in self.parts:
+                        p.clear()
 
 
 
