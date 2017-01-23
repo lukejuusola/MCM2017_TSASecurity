@@ -44,7 +44,7 @@ class Queue:
                                         self.holder = np.random.choice(self.exitRates)
                                 else:
                                         break
-                self.lastnumleft = 0
+                self.lastnumleft = numleft
 
         def getData(self):
             '''Returns a string containing, in order, size numadded numleft. Should be called
