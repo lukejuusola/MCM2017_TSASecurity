@@ -3,6 +3,8 @@ from holder import Holder
 from queue  import Queue
 from airport import Airport
 from exit import Exit
+from split import Split
+from merge import Merge
 from decision import Decision
 import matplotlib.pyplot as plt
 from functions import *
@@ -33,7 +35,18 @@ def timeFunc(t):
     x = int(x)
     return x
 
-if __name__ == '__main__':
+def genConstFunc(alpha):
+    def constFunc(t):
+        return alpha
+    return constFunc
+
+def genLinFunc(alpha):
+    def f(t):
+        rate = alpha*t
+        return int(rate) + np.random.choice([0,1],p=[1-(rate-int(rate)), (rate-int(rate))])
+    return f
+
+if __name__ == '__m!ain__':
     q1 = Queue([1])
     h1 = Holder(1, np.random.normal(100, 5, 100000).astype(int))
     h2 = Holder(1, np.random.normal(100, 5, 100000).astype(int))
@@ -42,6 +55,21 @@ if __name__ == '__main__':
     out = Exit()
     objects = [q1, d1, h1, h2, h3, out]
     edgelist = [(q1, d1), (d1,h1),(d1,h2),(d1,h3),(h1,out),(h2,out),(h3,out)]
+    adjmatrix = edgeToAdj(objects, edgelist)
+    ap = Airport(0, len(objects)-1, objects, adjmatrix)
+
+if __name__ == '__main__':
+    inq = Queue(np.random.normal(13, 4.5, 100000).astype(int))
+    h1 = Holder(100, np.random.normal(10, 2, 100000).astype(int))
+    q1 = Queue(np.random.normal(15, 2, 100000).astype(int), capacity=20)
+    q2 = Queue(np.random.normal(5, 2, 100000).astype(int), capacity=10)
+    q2.ptype = 'bags'
+    h2 = Holder(5, np.random.normal(5, 2, 100000).astype(int))
+    out = Exit()
+    split = Split(q1, q2, [2])
+    merge = Merge(1, 'normal', 'bags', out, split)
+    objects = [inq, h1, q1, q2, out, split, merge]
+    edgelist = [(inq, h1),(h1, split), (split, q1), (split, q2), (q1, merge), (q2, merge), (merge, out)]
     adjmatrix = edgeToAdj(objects, edgelist)
     ap = Airport(0, len(objects)-1, objects, adjmatrix)
     

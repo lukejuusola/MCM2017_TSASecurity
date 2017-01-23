@@ -7,7 +7,7 @@ class Decision:
                 self.func = func
                 self.exits = exits
 
-        def add(self, num):
+        def add(self, num, ptype='normal'):
                 while num > 0:
                         prob = self.func(self.output)
                         if np.sum(prob) == 0:

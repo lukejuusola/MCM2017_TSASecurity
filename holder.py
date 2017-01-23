@@ -13,8 +13,9 @@ class Holder:
                 self.avg = np.average(exitRates)
                 self.utility = np.array([0])
                 self.capacity = capacity
+                self.ptype = 'normal'
 
-        def add(self, num):
+        def add(self, num, ptype='normal'):
                 '''Attemps to add num people to the holder. Returns the number of
                 people rejected from the holder.'''
                 i = np.where(np.isnan(self.spots))[0]
@@ -33,8 +34,8 @@ class Holder:
                 return ', '.join(self.spots.astype(str))
                 
 
-        def isSpace(self):
-                return self.getsize() < self.capacity
+        def isSpace(self, num=1):
+                return self.getsize() + num < self.capacity
 
         def tick(self, num):
                 '''Updates the holder array for num ticks.'''
@@ -42,7 +43,7 @@ class Holder:
                 leaving = np.where(self.spots <= 0)[0]
                 numLeaving = len(leaving)
                 if numLeaving > 0:
-                        left = numLeaving - self.output.add(numLeaving)
+                        left = numLeaving - self.output.add(numLeaving, ptype=self.ptype)
                         self.spots[leaving[0:left]] = np.NaN
 
         def utility(self):

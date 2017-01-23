@@ -1,9 +1,9 @@
 import numpy as np
-
+import sys
 
 
 class Queue:
-        def __init__(self, exitRates):
+        def __init__(self, exitRates, capacity=sys.maxsize):
                 '''
                 exitRates: probability array
                 output: output Holder class
@@ -16,12 +16,18 @@ class Queue:
                 self.utility = np.array([0])
                 self.lastnumleft = 0
                 self.lastnumadded = 0
+                self.ptype = 'normal'
+                self.capacity = capacity
                 
-        def add(self, num):
+        def add(self, num, ptype='normal'):
                 '''Attemps to add num people to the queue. Returns the number of
                 people rejected from the queue. No one should be rejected.'''
                 if self.size == 0:
                         self.holder = np.random.choice(self.exitRates)
+                if num + self.size > self.capacity:
+                        num -= self.capacity - self.size
+                        self.size = self.capacity
+                        return num
                 self.size += num
                 self.lastnumadded = num
                 return 0
@@ -38,7 +44,7 @@ class Queue:
                         num -= self.holder
                         self.holder -= temp
                         if self.holder <= 0:
-                                if self.output.add(1) == 0:
+                                if self.output.add(1, ptype=self.ptype) == 0:
                                         self.size -= 1
                                         numleft += 1
                                         self.holder = np.random.choice(self.exitRates)
@@ -55,7 +61,7 @@ class Queue:
                 '''Returns the expected exitWait of the queue.'''
                 return (self.size + 1) * self.avg + self.output.exitWait()
 
-        def isSpace(self):
+        def isSpace(self, num=1):
                 return 1
                 
         def selfWait(self):

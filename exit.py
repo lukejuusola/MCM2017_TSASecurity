@@ -6,7 +6,7 @@ class Exit:
         def tick(self, num):
                 return None
                 
-        def add(self, num):
+        def add(self, num, ptype='normal'):
                 self.size += num
                 return 0
 
