@@ -46,13 +46,13 @@ class Airport:
                 should be the target filepath. Otherwise, outname = 'none' '''
                 if outname != 'none' and not os.path.exists(outname):
                         os.makedirs(outname)
-                finfo = open(outname + '/info.dat', 'w')
+                finfo = open(outname + '/info.csv', 'w')
                 t = 0
                 if outname != 'none':
                         fouts = []
                         for obj in self.parts:
                                 finfo.write(str(obj) + ',' + hex(id(obj)) + '\n')
-                                fouts.append(open(outname + '/' +  hex(id(obj)) + '.dat','w'))
+                                fouts.append(open(outname + '/' +  hex(id(obj)) + '.csv','w'))
                 finfo.close()
                 while t < numTicks:
                         self.start.add(timeFunc(t))

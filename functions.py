@@ -13,10 +13,10 @@ def edgeToAdj(objects, edgeList):
         return adjacency
 
 def loadData(location):
-    fnames = np.genfromtxt(location+'/info.dat', dtype=type(''), delimiter=',')
+    fnames = np.genfromtxt(location+'/info.csv', dtype=type(''), delimiter=',')
     data = []
     for ftype, name in fnames:
-        data.append((ftype, np.loadtxt(location + '/' + name + '.dat', delimiter=',')))    
+        data.append((ftype, np.loadtxt(location + '/' + name + '.csv', delimiter=',')))    
     return data
 
 def makeaaronsdata(fullspots):
@@ -31,4 +31,9 @@ def makeaaronsdata(fullspots):
         data.append(vadded)
     return np.array(data)
         
-    
+def getNames(loc):
+    f = open(loc)
+    names = []
+    for line in f:
+        names.append(line.split(',')[1].strip())
+    return names
