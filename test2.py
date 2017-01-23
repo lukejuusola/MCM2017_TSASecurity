@@ -68,8 +68,8 @@ if __name__ == '__main__':
     out = Exit()
     split = Split(q1, q2, [2])
     merge = Merge(1, 'normal', 'bags', out, split)
-    objects = [inq, h1, q1, q2, out, split, merge]
-    edgelist = [(inq, h1),(h1, split), (split, q1), (split, q2), (q1, merge), (q2, merge), (merge, out)]
+    objects = [inq, h1, q1, q2, split, merge, h2, out]
+    edgelist = [(inq, h1),(h1, split), (split, q1), (split, q2), (q1, merge), (q2, merge), (merge, h2), (h2,out)]
     adjmatrix = edgeToAdj(objects, edgelist)
     ap = Airport(0, len(objects)-1, objects, adjmatrix)
     
