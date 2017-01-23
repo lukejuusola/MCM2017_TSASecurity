@@ -15,6 +15,7 @@ class Holder:
                 self.capacity = capacity
                 self.ptype = 'normal'
                 self.lastvalues = []
+                self.lastnumleft = 0
 
         def add(self, num, ptype='normal'):
                 '''Attemps to add num people to the holder. Returns the number of
@@ -35,11 +36,13 @@ class Holder:
 
         def getData(self):
                 lv = self.lastvalues
+                ln = self.lastnumleft
                 self.lastvalues = []
+                self.lastnumleft = 0
                 if len(lv) == 0:
-                        return str(self.getsize())
+                        return str(self.getsize()) + ',' + str(ln)
                 else:
-                        return str(self.getsize()) + ',' + ','.join(lv.astype(str))
+                        return str(self.getsize()) + ',' + str(ln) + ',' + ','.join(lv.astype(str))
 
         def isSpace(self, num=1):
                 return self.getsize() + num < self.capacity
@@ -49,9 +52,11 @@ class Holder:
                 self.spots -= num
                 leaving = np.where(self.spots <= 0)[0]
                 numLeaving = len(leaving)
+                left = 0
                 if numLeaving > 0:
                         left = numLeaving - self.output.add(numLeaving, ptype=self.ptype)
                         self.spots[leaving[0:left]] = np.NaN
+                self.lastnumleft = left
 
         def utility(self):
                 return np.random.choice(self.utility)
