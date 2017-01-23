@@ -1,11 +1,14 @@
 import numpy as np
 
 class Decision:
-        def __init__(self, exits, output, func):
+        def __init__(self, exits, output, func, name=''):
                 """Exits is a list of INDEXES"""
                 self.output = output
                 self.func = func
                 self.exits = exits
+                self.name = name
+                if self.name == '':
+                        self.name = hex(id(self))
 
         def add(self, num, ptype='normal'):
                 while num > 0:

@@ -61,8 +61,8 @@ if __name__ == '__m!ain__':
 if __name__ == '__main__':
     inq = Queue(np.random.normal(13, 4.5, 100000).astype(int))
     h1 = Holder(100, np.random.normal(10, 2, 100000).astype(int))
-    q1 = Queue(np.random.normal(15, 2, 100000).astype(int), capacity=20)
-    q2 = Queue(np.random.normal(5, 2, 100000).astype(int), capacity=10)
+    q1 = Queue(np.random.normal(15, 2, 100000).astype(int), capacity=5)
+    q2 = Queue(np.random.normal(15, 2, 100000).astype(int), capacity=5)
     q2.ptype = 'bags'
     h2 = Holder(5, np.random.normal(5, 2, 100000).astype(int))
     out = Exit()

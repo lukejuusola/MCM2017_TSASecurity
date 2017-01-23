@@ -2,6 +2,7 @@ import random
 import numpy as np
 from scipy.sparse.csgraph import breadth_first_order
 import os
+import shutil
                 
 class Airport:
         '''Airport tick must operate so that decisions are updated last.'''
@@ -44,15 +45,16 @@ class Airport:
                 how many people enter the airport on a given tic, where timeFunc
                 is of the form numEnteringOnTick = timeFunc(tick). To save data, outname
                 should be the target filepath. Otherwise, outname = 'none' '''
-                if outname != 'none' and not os.path.exists(outname):
+                if outname != 'none':
+                        shutil.rmtree(outname)
                         os.makedirs(outname)
-                finfo = open(outname + '/info.csv', 'w')
+                finfo = open(outname + '/info.dat', 'w')
                 t = 0
                 if outname != 'none':
                         fouts = []
                         for obj in self.parts:
-                                finfo.write(str(obj) + ',' + hex(id(obj)) + '\n')
-                                fouts.append(open(outname + '/' +  hex(id(obj)) + '.csv','w'))
+                                finfo.write(str(obj) + ',' + obj.name + '\n')
+                                fouts.append(open(outname + '/' +  obj.name + '.dat','w'))
                 finfo.close()
                 while t < numTicks:
                         self.start.add(timeFunc(t))

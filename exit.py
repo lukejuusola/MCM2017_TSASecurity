@@ -2,6 +2,7 @@ class Exit:
         def __init__(self):
                 self.output = None
                 self.size = 0
+                self.name = 'exit'
                 
         def tick(self, num):
                 return None

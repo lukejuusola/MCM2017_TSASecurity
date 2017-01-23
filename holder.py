@@ -1,7 +1,7 @@
 import numpy as np
 
 class Holder:
-        def __init__(self, capacity, exitRates):
+        def __init__(self, capacity, exitRates, name=''):
                 '''
                 capacity: The maximum size of the holder
                 exitRates: A randomly distributed array of wait values to choose from
@@ -16,23 +16,30 @@ class Holder:
                 self.ptype = 'normal'
                 self.lastvalues = []
                 self.lastnumleft = 0
+                self.name = name
+                if self.name == '':
+                        self.name = hex(id(self))
 
         def add(self, num, ptype='normal'):
                 '''Attemps to add num people to the holder. Returns the number of
                 people rejected from the holder.'''
                 i = np.where(np.isnan(self.spots))[0]
                 if len(i) > num:
-                        self.lastvalues = self.exitRates[np.random.randint(0, len(self.exitRates), num)]
-                        self.spots[i[0:num]] = self.lastvalues
+                        lv = self.exitRates[np.random.randint(0, len(self.exitRates), num)]
+                        self.spots[i[0:num]] = lv
+                        self.lastvalues = np.append(self.lastvalues, lv).astype(int)
                         return 0
-                else:
-                        self.lastvalues = self.exitRates[np.random.randint(0, len(self.exitRates), num)]
-                        self.spots[i] = self.lastvalues
+                elif len(i) > 0:
+                        lv = self.exitRates[np.random.randint(0, len(self.exitRates), len(i))]
+                        self.spots[i] = lv
+                        self.lastvalues = np.append(self.lastvalues, lv).astype(int)
                         return num - len(i)
+                else:
+                        return num
 
         def getsize(self):
                 '''Returns the number of spots that are full'''
-                return len(np.where(self.spots > 0)[0])
+                return len(np.where(~np.isnan(self.spots))[0])
 
         def getData(self):
                 lv = self.lastvalues
@@ -45,12 +52,13 @@ class Holder:
                         return str(self.getsize()) + ',' + str(ln) + ',' + ','.join(lv.astype(str))
 
         def isSpace(self, num=1):
-                return self.getsize() + num < self.capacity
+                return self.getsize() + num <= self.capacity
 
         def tick(self, num):
                 '''Updates the holder array for num ticks.'''
                 self.spots -= num
                 leaving = np.where(self.spots <= 0)[0]
+                self.spots[leaving] = 1
                 numLeaving = len(leaving)
                 left = 0
                 if numLeaving > 0:

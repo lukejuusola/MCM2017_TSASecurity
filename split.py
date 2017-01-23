@@ -1,7 +1,7 @@
 import numpy as np
 
 class Split:
-    def __init__(self, outA, outB, numdist):
+    def __init__(self, outA, outB, numdist, name=''):
         '''exits is  a list of indices. numdist is the probability distribution of
         the number of "bags" each passenger has. # to outB = numdist * #
         to outA'''
@@ -11,17 +11,18 @@ class Split:
         self.numvalues = []
         self.lastadded = 0
         self.lastvalues = []
+        self.name = name
+        if self.name == '':
+            self.name = hex(id(self))
 
     def add(self, num, ptype='normal'):
-        self.lastadded = 0
-        self.lastvalues = []
         while num > 0:
             numbags = np.random.choice(self.numdist)
-            self.numvalues.append(numbags)
-            if self.outB.isSpace(numbags) and self.outA.add(1, ptype) > 0:
+            if self.outB.isSpace(numbags) and self.outA.add(1, ptype) == 0:
                 self.outB.add(numbags, ptype)
             else:
                 return num
+            self.numvalues.append(numbags)
             self.lastadded += 1
             self.lastvalues.append(numbags)
             num -= 1
@@ -44,7 +45,7 @@ class Split:
         return str(la) + ',' + ','.join(lv.astype(str))
 
     def exitWait(self):
-        return max(outA.exitWait(), outB.exitWait())
+        return max(self.outA.exitWait(), self.outB.exitWait())
 
     def clear(self):
         self.lastadded = 0

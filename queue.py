@@ -3,7 +3,7 @@ import sys
 
 
 class Queue:
-        def __init__(self, exitRates, capacity=sys.maxsize):
+        def __init__(self, exitRates, capacity=sys.maxsize, name=''):
                 '''
                 exitRates: probability array
                 output: output Holder class
@@ -18,6 +18,9 @@ class Queue:
                 self.lastnumadded = 0
                 self.ptype = 'normal'
                 self.capacity = capacity
+                self.name = name
+                if self.name == '':
+                        self.name = hex(id(self))
                 
         def add(self, num, ptype='normal'):
                 '''Attemps to add num people to the queue. Returns the number of
@@ -29,7 +32,7 @@ class Queue:
                         self.size = self.capacity
                         return num
                 self.size += num
-                self.lastnumadded = num
+                self.lastnumadded += num
                 return 0
 
         def getsize(self):
@@ -49,7 +52,9 @@ class Queue:
                                         numleft += 1
                                         self.holder = np.random.choice(self.exitRates)
                                 else:
+                                        self.holder = 1
                                         break
+                
                 self.lastnumleft = numleft
 
         def getData(self):
@@ -66,7 +71,7 @@ class Queue:
                 return (self.size + 1) * self.avg + self.output.exitWait()
 
         def isSpace(self, num=1):
-                return 1
+                return num + self.size <= self.capacity
                 
         def selfWait(self):
                 return (self.size + 1) * self.avg
